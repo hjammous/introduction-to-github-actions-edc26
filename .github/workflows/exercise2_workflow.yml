@@ -27,8 +27,8 @@ jobs:
     steps:
       - name: "MultiStep"
         run: |
-        echo "Hello, I m slow job"
-        sleep 120
+          echo "Hello, I m slow job"
+          sleep 120
   waiting_job:
     needs: slow_job
     runs-on: ubuntu-latest
