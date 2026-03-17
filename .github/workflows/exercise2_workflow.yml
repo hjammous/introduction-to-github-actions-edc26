@@ -1,0 +1,36 @@
+name: worflow of exercise 2
+run-name: Second workflow
+
+# Events triggering the workflow
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Group of jobs to run as part of the workflow
+jobs:
+  ubuntu_job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello, I m Ubuntu latest"
+  macos_job:
+    runs-on: macos-latest
+    steps:
+      - run: echo "Hello, I m Macos latest"
+  slow_job:
+    timeout-minutes: 1
+    runs-on: ubuntu-latest
+    steps:
+      - name: "MultiStep"
+         run: |
+         echo "Hello, I m slow job"
+         sleep 120
+  waiting_job:
+    needs: slow_job
+    runs-on: ubuntu-latest
+    steps:
+      - run: ls -l
