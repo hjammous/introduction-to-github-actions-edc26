@@ -1,0 +1,38 @@
+name: Workflow of exercise 3
+run-name: Variables and secrets
+
+permissions: {}
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  MyVariable: "Hello world"
+
+# Group of jobs to run as part of the workflow
+jobs:
+  env_job:
+    name: Job printing variables and secrets
+    runs-on: ubuntu-latest
+    env:
+      JobVariable: "This is JobVariable"
+      SecretValue: ${{ secrets.MySecret }}
+    steps:
+      - run: echo "MyVariable ${MyVariable}"
+      - run: echo "MyVariable (env context) ${{ env.MyVariable }}"
+
+      - run: echo "JobVariable ${JobVariable}"
+      - run: echo "JobVariable (env context) ${{ env.JobVariable }}"
+
+      - run: echo "This step only runs if the secret value is 'alice'"
+        if: ${{ env.SecretValue == 'alice' }}
+
+      # Don't print secrets. This is just an example
+      # The GITHUB_TOKEN should be filtered in the output
+      - run: echo "GitHub token ${{ secrets.GITHUB_TOKEN }}"
+      - run: echo "GitHub token (github context) ${{ github.token }}"
+      - run: echo "MySecret (secrets context) ${{ secrets.MySecret }}"
